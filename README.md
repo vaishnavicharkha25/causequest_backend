@@ -11,6 +11,7 @@ npm install
 ## 🌐 Environment Setup
 #### Create an .env.development file in the project root:
 
+```bash
 DATABASE_HOST=localhost
 DATABASE_PORT=3306
 DATABASE_DIALECT=mysql
@@ -19,6 +20,7 @@ DATABASE_USER=root
 DATABASE_PASSWORD=
 NODE_ENV=development
 FILE_UPLOAD_DESTINATION_PATH=uploads
+```
 
 ## ⚙️ Sequelize Setup
 ```bash
@@ -27,7 +29,6 @@ npx sequelize-cli init
 
 Move them to src/database/... and update your .sequelizerc:
 ```bash
-# .sequelizerc
 const path = require('path');
 
 module.exports = {
@@ -43,7 +44,6 @@ module.exports = {
 #### Development & Build
 ```bash
 npm run dev             # Start dev server with nodemon
-npm run start           # Start server (compiled JS)
 npm run tsc             # Compile TS
 npm run tsc-watch       # Compile TS in watch mode
 ```
