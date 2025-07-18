@@ -1,6 +1,7 @@
 # Backend Project (Node.js + TypeScript + Sequelize)
 
-This is a backend server setup using **Node.js**, **Express**, **Sequelize (with Sequelize CLI)**, and **TypeScript**.
+This is a backend server setup using **Node.js**, **Express**, **Sequelize (with Sequelize CLI)**,
+and **TypeScript**.
 
 ## 📦 Installation
 
@@ -9,6 +10,7 @@ npm install
 ```
 
 ## 🌐 Environment Setup
+
 #### Create an .env.development file in the project root:
 
 ```bash
@@ -23,11 +25,19 @@ FILE_UPLOAD_DESTINATION_PATH=uploads
 ```
 
 ## ⚙️ Sequelize Setup
+
 ```bash
 npx sequelize-cli init
 ```
 
+## Generate a Migration
+
+```bash
+npx sequelize-cli migration:generate --name <migration_name>
+```
+
 Move them to src/database/... and update your .sequelizerc:
+
 ```bash
 const path = require('path');
 
@@ -42,6 +52,7 @@ module.exports = {
 ## 🚀 Scripts
 
 #### Development & Build
+
 ```bash
 npm run dev             # Start dev server with nodemon
 npm run tsc             # Compile TS
@@ -49,6 +60,7 @@ npm run tsc-watch       # Compile TS in watch mode
 ```
 
 #### Sequelize CLI
+
 ```bash
 npm run dev-migrate-up       # Run migrations
 npm run dev-migrate-down     # Undo last migration
