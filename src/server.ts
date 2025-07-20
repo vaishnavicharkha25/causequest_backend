@@ -5,7 +5,7 @@ import logger from './utils/winstonLogger';
 import moment from 'moment-timezone';  // Moment for timezone
 
 const NAMESPACE = '[SERVER CONNECTION]:';
-const PORT =  9000;
+const PORT =  3000;
 
 const server = http.createServer(app);  // Creating an HTTP server using the express app
 
