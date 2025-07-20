@@ -1,4 +1,5 @@
-import { DataTypes, Model, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '../config/sequilize';
 import { UserMaster } from './user_master';
 
 interface NotificationAttributes {
@@ -23,36 +24,35 @@ export class Notification extends Model<NotificationAttributes, NotificationCrea
   }
 }
 
-export function initNotification(sequelize: Sequelize) {
-  Notification.init({
-    NotificationId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    UserId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    Message: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    IsRead: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    CreatedOn: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    }
-  }, {
-    sequelize,
-    tableName: 'notifications',
-    timestamps: false,
-  });
+// Initialize immediately
+Notification.init({
+  NotificationId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  UserId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  Message: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  IsRead: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false,
+  },
+  CreatedOn: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  }
+}, {
+  sequelize, // Your Sequelize instance here
+  tableName: 'notifications',
+  timestamps: false,
+});
 
-  return Notification;
-}
+export default { Notification };

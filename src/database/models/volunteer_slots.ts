@@ -1,4 +1,5 @@
-import { DataTypes, Model, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '../config/sequilize';
 import { NgoMaster } from './ngo_master';
 import { ServiceMaster } from './service_master';
 import { StudentMaster } from './student_master';
@@ -17,9 +18,12 @@ interface VolunteerSlotAttributes {
   ModifiedOn?: Date | null;
 }
 
-interface VolunteerSlotCreationAttributes extends Optional<VolunteerSlotAttributes, 'VolunteerSlotId' | 'StudentId' | 'ModifiedBy' | 'ModifiedOn'> {}
+interface VolunteerSlotCreationAttributes
+  extends Optional<VolunteerSlotAttributes, 'VolunteerSlotId' | 'StudentId' | 'ModifiedBy' | 'ModifiedOn'> {}
 
-export class VolunteerSlot extends Model<VolunteerSlotAttributes, VolunteerSlotCreationAttributes> implements VolunteerSlotAttributes {
+export class VolunteerSlot
+  extends Model<VolunteerSlotAttributes, VolunteerSlotCreationAttributes>
+  implements VolunteerSlotAttributes {
   declare VolunteerSlotId: number;
   declare NgoId: number;
   declare ServiceId: number;
@@ -39,8 +43,8 @@ export class VolunteerSlot extends Model<VolunteerSlotAttributes, VolunteerSlotC
   }
 }
 
-export function initVolunteerSlot(sequelize: Sequelize) {
-  VolunteerSlot.init({
+VolunteerSlot.init(
+  {
     VolunteerSlotId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -88,12 +92,13 @@ export function initVolunteerSlot(sequelize: Sequelize) {
     ModifiedOn: {
       type: DataTypes.DATE,
       allowNull: true,
-    }
-  }, {
+    },
+  },
+  {
     sequelize,
     tableName: 'volunteer_slots',
     timestamps: false,
-  });
+  }
+);
 
-  return VolunteerSlot;
-}
+export default{ VolunteerSlot };

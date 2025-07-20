@@ -53,9 +53,38 @@ app.use('/api/v1/uploads', express.static(path.join(__dirname, '..', 'uploads'))
 
 // Global error handler
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-    logger.error(`${NAMESPACE} ${err.message}`);
-    res.status(500).json({ message: err.message });
+    console.error('[ERROR HANDLER] Raw error object:', err);
+
+    try {
+        let errorName = 'UnknownError';
+        let status = 500;
+        let message = 'Internal server error';
+
+        // Check if 'err' is an object and not null
+        if (err && typeof err === 'object' && !Array.isArray(err)) {
+            // Only try to access constructor name if constructor is defined
+            if (typeof err.constructor === 'function' && err.constructor.name) {
+                errorName = err.constructor.name;
+            }
+
+            if ('status' in err && typeof err.status === 'number') {
+                status = err.status;
+            }
+
+            if ('message' in err && typeof err.message === 'string') {
+                message = err.message;
+            }
+        }
+
+        logger.error(`${NAMESPACE} [${errorName}]: ${message}`);
+        res.status(status).json({ message });
+    } catch (internalErr) {
+        console.error('[ERROR HANDLER FAILED]:', internalErr);
+        res.status(500).json({ message: 'Unknown error occurred' });
+    }
 };
+
+
 
 // Use router
 app.use('/api/v1', router);

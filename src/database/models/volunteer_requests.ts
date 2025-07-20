@@ -1,4 +1,5 @@
-import { DataTypes, Model, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '../config/sequilize'; // Make sure this path is correct
 import { NgoMaster } from './ngo_master';
 
 interface VolunteerRequestAttributes {
@@ -21,9 +22,15 @@ interface VolunteerRequestAttributes {
   ModifiedOn?: Date | null;
 }
 
-interface VolunteerRequestCreationAttributes extends Optional<VolunteerRequestAttributes, 'RequestId' | 'Description' | 'Requirements' | 'TimePreferences' | 'Deadline' | 'Location' | 'ModifiedBy' | 'ModifiedOn'> {}
+interface VolunteerRequestCreationAttributes
+  extends Optional<
+    VolunteerRequestAttributes,
+    'RequestId' | 'Description' | 'Requirements' | 'TimePreferences' | 'Deadline' | 'Location' | 'ModifiedBy' | 'ModifiedOn'
+  > {}
 
-export class VolunteerRequest extends Model<VolunteerRequestAttributes, VolunteerRequestCreationAttributes> implements VolunteerRequestAttributes {
+export class VolunteerRequest
+  extends Model<VolunteerRequestAttributes, VolunteerRequestCreationAttributes>
+  implements VolunteerRequestAttributes {
   declare RequestId: number;
   declare NgoId: number;
   declare Title: string;
@@ -47,8 +54,9 @@ export class VolunteerRequest extends Model<VolunteerRequestAttributes, Voluntee
   }
 }
 
-export function initVolunteerRequest(sequelize: Sequelize) {
-  VolunteerRequest.init({
+// ✅ Initialize the model immediately
+VolunteerRequest.init(
+  {
     RequestId: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -119,12 +127,13 @@ export function initVolunteerRequest(sequelize: Sequelize) {
     ModifiedOn: {
       type: DataTypes.DATE,
       allowNull: true,
-    }
-  }, {
+    },
+  },
+  {
     sequelize,
     tableName: 'volunteer_requests',
     timestamps: false,
-  });
+  }
+);
 
-  return VolunteerRequest;
-}
+export default { VolunteerRequest };

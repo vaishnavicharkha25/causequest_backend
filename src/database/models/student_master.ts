@@ -1,4 +1,5 @@
-import { DataTypes, Model, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '../config/sequilize'; // Make sure this path points to your actual sequelize instance
 import { UserMaster } from './user_master';
 
 interface StudentMasterAttributes {
@@ -15,9 +16,11 @@ interface StudentMasterAttributes {
   ModifiedOn?: Date | null;
 }
 
-interface StudentMasterCreationAttributes extends Optional<StudentMasterAttributes, 'StudentId' | 'Phone' | 'Location' | 'UserType' | 'ModifiedBy' | 'ModifiedOn'> {}
+interface StudentMasterCreationAttributes
+  extends Optional<StudentMasterAttributes, 'StudentId' | 'Phone' | 'Location' | 'UserType' | 'ModifiedBy' | 'ModifiedOn'> {}
 
-export class StudentMaster extends Model<StudentMasterAttributes, StudentMasterCreationAttributes> implements StudentMasterAttributes {
+export class StudentMaster extends Model<StudentMasterAttributes, StudentMasterCreationAttributes>
+  implements StudentMasterAttributes {
   declare StudentId: number;
   declare UserId: number;
   declare FullName: string;
@@ -35,60 +38,59 @@ export class StudentMaster extends Model<StudentMasterAttributes, StudentMasterC
   }
 }
 
-export function initStudentMaster(sequelize: Sequelize) {
-  StudentMaster.init({
-    StudentId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    UserId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    FullName: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    Phone: {
-      type: DataTypes.STRING(20),
-      allowNull: true,
-    },
-    Location: {
-      type: DataTypes.STRING(255),
-      allowNull: true,
-    },
-    UserType: {
-      type: DataTypes.STRING(50),
-      allowNull: true,
-    },
-    IsActive: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
-    },
-    CreatedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    CreatedOn: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    ModifiedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    ModifiedOn: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    }
-  }, {
-    sequelize,
-    tableName: 'student_master',
-    timestamps: false,
-  });
+// Initialize immediately
+StudentMaster.init({
+  StudentId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  UserId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  FullName: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  Phone: {
+    type: DataTypes.STRING(20),
+    allowNull: true,
+  },
+  Location: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  UserType: {
+    type: DataTypes.STRING(50),
+    allowNull: true,
+  },
+  IsActive: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
+  CreatedBy: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  CreatedOn: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  ModifiedBy: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  ModifiedOn: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  }
+}, {
+  sequelize,
+  tableName: 'student_master',
+  timestamps: false,
+});
 
-  return StudentMaster;
-}
+export default { StudentMaster };

@@ -27,6 +27,7 @@ module.exports = {
                     Rating: { type: DataTypes.FLOAT, allowNull: true },
                     VolunteersNeeded: { type: DataTypes.INTEGER, allowNull: true },
                     ContactEmail: { type: DataTypes.STRING(255), allowNull: true },
+                    PhoneNumber: { type: DataTypes.STRING(20), allowNull: true }, // <== Added field here
                     Website: { type: DataTypes.STRING(255), allowNull: true },
                     IsActive: { type: DataTypes.BOOLEAN, defaultValue: true, allowNull: false },
                     CreatedBy: { type: DataTypes.INTEGER, allowNull: false },

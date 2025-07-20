@@ -1,6 +1,6 @@
-import { DataTypes, Model, Sequelize, Optional } from 'sequelize';
-import RoleMaster from './role_master';
-
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '../config/sequilize';
+import { RoleMaster } from './role_master';
 interface UserMasterAttributes {
   UserId: number;
   Name: string;
@@ -15,9 +15,11 @@ interface UserMasterAttributes {
   ModifiedOn?: Date | null;
 }
 
-interface UserMasterCreationAttributes extends Optional<UserMasterAttributes, 'UserId' | 'ProfileImage' | 'IsActive' | 'ModifiedBy' | 'ModifiedOn'> {}
+interface UserMasterCreationAttributes
+  extends Optional<UserMasterAttributes, 'UserId' | 'ProfileImage' | 'IsActive' | 'ModifiedBy' | 'ModifiedOn'> {}
 
-export class UserMaster extends Model<UserMasterAttributes, UserMasterCreationAttributes> implements UserMasterAttributes {
+export class UserMaster extends Model<UserMasterAttributes, UserMasterCreationAttributes>
+  implements UserMasterAttributes {
   declare UserId: number;
   declare Name: string;
   declare Email: string;
@@ -35,61 +37,61 @@ export class UserMaster extends Model<UserMasterAttributes, UserMasterCreationAt
   }
 }
 
-export function initUserMaster(sequelize: Sequelize) {
-  UserMaster.init({
-    UserId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
-    Name: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    Email: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-      unique: true,
-    },
-    PasswordHash: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    RoleId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    ProfileImage: {
-      type: DataTypes.STRING(500),
-      allowNull: true,
-    },
-    IsActive: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
-    },
-    CreatedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    CreatedOn: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    ModifiedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    ModifiedOn: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-  }, {
-    sequelize,
-    tableName: 'user_master',
-    timestamps: false,
-  });
+// ✅ Init the model immediately
+UserMaster.init({
+  UserId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  Name: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  Email: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    unique: true,
+  },
+  PasswordHash: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  RoleId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  ProfileImage: {
+    type: DataTypes.STRING(500),
+    allowNull: true,
+  },
+  IsActive: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
+  CreatedBy: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  CreatedOn: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  ModifiedBy: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  ModifiedOn: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  },
+}, {
+  sequelize, // ✅ Injected from your connection
+  tableName: 'user_master',
+  timestamps: false,
+});
 
-  return UserMaster;
-}
+// ✅ Export as named export to match your current imports
+export  default { UserMaster };

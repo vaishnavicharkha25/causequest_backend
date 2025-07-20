@@ -1,4 +1,5 @@
-import { DataTypes, Model, Sequelize, Optional } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
+import sequelize from '../config/sequilize'; // Adjust path as needed
 import { NgoMaster } from './ngo_master';
 
 interface ServiceMasterAttributes {
@@ -35,60 +36,58 @@ export class ServiceMaster extends Model<ServiceMasterAttributes, ServiceMasterC
   }
 }
 
-export function initServiceMaster(sequelize: Sequelize) {
-  ServiceMaster.init({
-    ServiceId: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true
-    },
-    NgoId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    Title: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    Category: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    Description: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
-    AvailableSlots: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    IsActive: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
-    },
-    CreatedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    CreatedOn: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    ModifiedBy: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    ModifiedOn: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    }
-  }, {
-    sequelize,
-    tableName: 'services',
-    timestamps: false,
-  });
+ServiceMaster.init({
+  ServiceId: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
+  NgoId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  Title: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  Category: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  Description: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
+  AvailableSlots: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  IsActive: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: true,
+  },
+  CreatedBy: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  CreatedOn: {
+    type: DataTypes.DATE,
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
+  },
+  ModifiedBy: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+  },
+  ModifiedOn: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  }
+}, {
+  sequelize,
+  tableName: 'services',
+  timestamps: false,
+});
 
-  return ServiceMaster;
-}
+export default { ServiceMaster };
