@@ -15,8 +15,8 @@ if (require.main === module) {
     (async () => {
         try {
             // Authenticate with the database before starting the server
-            await sequelize.authenticate();  // Make sure sequelize is properly set up in ./database/config/sequelize.ts
-            logger.info(`${NAMESPACE} Database connected successfully`);
+            // await sequelize.authenticate();  // Make sure sequelize is properly set up in ./database/config/sequelize.ts
+            // logger.info(`${NAMESPACE} Database connected successfully`);
 
             // Start the server after the database authentication
             server.listen(PORT, () => {
