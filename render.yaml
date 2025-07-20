@@ -3,7 +3,7 @@ services:
     name: node-backend
     env: node
     plan: free
-    branch: main
+    branch: dev
     buildCommand: |
       npm install
       npm run tsc
