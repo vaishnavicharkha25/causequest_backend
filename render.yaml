@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: node-backend
+    env: node
+    plan: free
+    branch: main
+    buildCommand: |
+      npm install
+      npm run tsc
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: development
+
+      - key: FILE_UPLOAD_DESTINATION_PATH
+        value: uploads
+
+      - key: JWT_SECRET
+        value: dfdsfd23dfds-JN02Q_T9Wsap-80mFFUf14djvafK1g6VgRoLUOtULRfudu_9scjzGucTyc72vS43qvD6AbVl8ukSKR1Qdhgsfhjghjgjgjhghjt-skhdketwrygnmbcxvcdsjfkudsrhkdscmdnvsiouefjk-sdjfhdf
+
+      - key: JWT_TOKEN_EXPIRY
+        value: 24h
+
+      - key: JWT_SHORT_HAND_TOKEN_EXPIRY
+        value: 15m
+
+      - key: JWT_REFRESH_TOKEN_EXPIRY
+        value: 7d
+
+      - key: DATABASE_URL
+        value: postgresql://postgres:Vaish1234@db.sybxxgekojskmecdsufe.supabase.co:5432/postgres
