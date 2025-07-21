@@ -111,27 +111,52 @@ export async function updateNgoProfile(req: Request, res: Response, next: NextFu
       return res.status(400).json({ message: 'Email cannot be updated' });
     }
 
-    const coverImageUrl = req.file
-      ? `/uploads/ngo_images/${req.file.filename}`
-      : null;
+    let coverImageUrl = null;
 
+    if (req.file) {
+      const bucketName = 'ngo'; // Supabase bucket name
+      const ext = path.extname(req.file.originalname);
+      const fileName = `ngo_${Date.now()}${ext}`;
+
+      const { data, error } = await supabase.storage
+        .from(bucketName)
+        .upload(fileName, req.file.buffer, {
+          contentType: req.file.mimetype,
+          upsert: false,
+        });
+
+      if (error) {
+        console.error('Supabase upload error:', error);
+        return res.status(500).json({ message: 'Failed to upload image to Supabase' });
+      }
+
+      const { data: publicUrlData } = supabase.storage
+        .from(bucketName)
+        .getPublicUrl(fileName);
+
+      coverImageUrl = publicUrlData.publicUrl;
+    }
+
+    // Merge coverImageUrl into updateData only if uploaded
     await updateNgoProfileByUserId(userId, {
       ...updateData,
-      ...(coverImageUrl && { coverImageUrl })
+      ...(coverImageUrl && { coverImageUrl }),
     });
 
-    // ✅ Fetch updated profile
     const updatedProfile = await getNgoProfileByUserId(userId);
 
     return res.status(200).json({
       success: true,
       message: 'Profile updated successfully',
-      data: updatedProfile
+      data: updatedProfile,
     });
+
   } catch (err) {
+    console.error('updateNgoProfile error:', err);
     next(err);
   }
 }
+
 
 export async function signoutNgo(req: Request, res: Response) {
   // If you're using HTTP-only cookies:
