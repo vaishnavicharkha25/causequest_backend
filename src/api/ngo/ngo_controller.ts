@@ -1,12 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import { createNgoAccount, getNgoProfileByUserId, signInNgo, updateNgoProfileByUserId } from './ngo_service';
+import path from 'path';
+import supabase from './supabase'
 
 
 // ✅ SIGN-UP Controller
 export async function signupNgo(req: Request, res: Response, next: NextFunction) {
   try {
     const {
-       email, password,
+      email, password,
       confirmPassword, phone, location,
       ngoName, ngoDescription,
       category, contactEmail, phoneNumber, website
@@ -16,19 +18,57 @@ export async function signupNgo(req: Request, res: Response, next: NextFunction)
       return res.status(400).json({ message: 'Passwords do not match' });
     }
 
-    const coverImageUrl = req.file
-      ? `/uploads/ngo_images/${req.file.filename}`
-      : req.body.coverImageUrl || null;
+    let coverImageUrl = null;
+
+    if (req.file) {
+      const bucketName = 'ngo'; // your bucket name
+      const ext = path.extname(req.file.originalname);
+      const fileName = `ngo_${Date.now()}${ext}`;
+
+      // Upload to Supabase Storage
+      const { data, error } = await supabase.storage
+        .from(bucketName)
+        .upload(fileName, req.file.buffer, {
+          contentType: req.file.mimetype,
+          upsert: false,
+        });
+
+      if (error) {
+        console.error('Error uploading image to Supabase:', error);
+        return res.status(500).json({ message: 'Image upload failed' });
+      }
+
+      // Get public URL for the uploaded file (assuming public bucket)
+      const { data: publicUrlData } = supabase.storage
+        .from(bucketName)
+        .getPublicUrl(fileName);
+
+      coverImageUrl = publicUrlData.publicUrl;
+    } else {
+      coverImageUrl = req.body.coverImageUrl || null;
+    }
 
     const result = await createNgoAccount({
-      email, password, confirmPassword,
-      phone, location, ngoName, ngoDescription,
-      category, contactEmail, phoneNumber, website, coverImageUrl
+      email,
+      password,
+      confirmPassword,
+      phone,
+      location,
+      ngoName,
+      ngoDescription,
+      category,
+      contactEmail,
+      phoneNumber,
+      website,
+      coverImageUrl
     });
 
-    return res.status(201).json(result);
-  } catch (err) {
-    next(err);
+    // Respond or call next middleware as you do currently
+    res.status(201).json({ message: 'NGO created successfully', data: result });
+
+  } catch (error) {
+    console.error('signupNgo error:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
 
