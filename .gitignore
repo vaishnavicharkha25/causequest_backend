@@ -3,4 +3,3 @@ dist
 .env.test
 .env.development
 logs
-uploads

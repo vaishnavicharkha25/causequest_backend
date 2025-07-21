@@ -32,14 +32,19 @@
 
 import dotenv from 'dotenv';
 import { applicationModeConstants } from '../../constants/applicationModeConstants';
- 
+
 const env = process.env.NODE_ENV || applicationModeConstants.DEVELOPMENT;
 dotenv.config({ path: `.env.${env}` });
- 
+
 export = {
     [env]: {
         use_env_variable: 'DATABASE_URL',
-        dialect: 'postgres'
+        dialect: 'postgres',
+        dialectOptions: {
+            ssl: {
+                require: true,
+                rejectUnauthorized: false, // You may want to change this depending on your cert config
+            }
+        }
     }
 };
- 
